@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*
 import logging
+import time
 
 logger = logging.getLogger('utils')
 
@@ -178,10 +179,10 @@ class CrawlerUtils(object):
         import os
 
         # 代理服务器
-        logger.info('[%d]开始获取代理IP' % (os.getpid(),))
+        print('[%d]开始获取代理IP' % (os.getpid(),))
         data = json.loads(requests.get(api_url).content)
         if data['success'] == False:
-            logger.error('代理出现错误:%s' % (data['msg'],))
+            print('代理出现错误:%s' % (data['msg'],))
             return None
         proxy_host = data['data'][0]['ip']
         proxy_port = data['data'][0]['port']
@@ -196,5 +197,36 @@ class CrawlerUtils(object):
             "http": proxy_meta,
             "https": proxy_meta,
         }
-        logger.info('[%d]获取代理IP成功,[%s],过期时间[%s]' % (os.getpid(), str(proxies), expire_time))
+        print('[%d]获取代理IP成功,[%s],过期时间[%s]' % (os.getpid(), str(proxies), expire_time))
         return proxies
+
+    @staticmethod
+    def get_cookies():
+        import os
+        from selenium import webdriver
+        from selenium.webdriver.common.keys import Keys
+        from functools import reduce
+
+        logger.info('开始获取cookie')
+        chromedriver = "C:/Program Files (x86)/Google/Chrome/Application/chromedriver.exe"
+        os.environ["webdriver.chrome.driver"] = chromedriver
+        option = webdriver.ChromeOptions()
+        option.add_argument('headless')
+        browser = webdriver.Chrome(chromedriver)
+        # browser = webdriver.Chrome(chromedriver, chrome_options=option)
+        browser.get('https://account.dianping.com/login')  # 需要打开的网址
+        browser.find_element_by_xpath('/html/body/div/div[2]/div[5]/span').click()  # 审查元素username的id
+        browser.find_element_by_xpath('//*[@id="tab-account"]').click()  # 审查元素username的id
+
+        time.sleep(10)
+        user = browser.find_element_by_xpath('//*[@id="login-username"]')  # 审查元素username的id
+        user.send_keys("kk3132012")  # 输入账号
+        password = browser.find_element_by_xpath('//*[@id="login-password"]')  # 审查元素password的name
+        password.send_keys("kk3132012")  # 输入密码
+        password.send_keys(Keys.RETURN)  # 实现自动点击登陆
+        cookie_dict = browser.get_cookies()
+        browser.close()
+        cookie = reduce(lambda x, y: x + y, map(lambda x: x['name'] + '=' + x['value'] + '; ', cookie_dict))[:-2]
+
+        logger.info('cookie获取完成:%s' % (cookie,))
+        return cookie

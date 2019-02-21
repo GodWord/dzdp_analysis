@@ -22,7 +22,8 @@ class Comment(Base):
     # 由shop_id+comment+comment_create_time三个字符串连接算出的MD5字段
     uuid = Column(String(32), nullable=True, unique=True, comment='唯一标识')
     shop_id = Column(BigInteger, nullable=True, index=True, comment='商家ID')
-    name = Column(String(255), nullable=True, comment='商家名称')
+    username = Column(String(255), nullable=True, comment='商家名称')
+    shop_name = Column(String(255), nullable=True, comment='商家名称')
     is_vip = Column(BOOLEAN, nullable=True, index=True, comment='是否为VIP')
     vip_level = Column(SMALLINT, nullable=True, default=0, index=True, comment='VIP等级')
     comment = Column(Text, nullable=True, comment='评论内容')
