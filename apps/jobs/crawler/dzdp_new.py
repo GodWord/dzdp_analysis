@@ -180,33 +180,6 @@ def get_data(url):
             comment_num = 0
             price_num = taste = service = environment = 0
 
-            # 获得评论
-            comments = com_html.xpath('//*[@id="review-list"]/div[2]/div[3]/div[3]/div[3]/ul/li')
-            print(comments)
-            msg = ""
-            for comment in comments:
-                descs = comment.xpath('//*[@id="rev_506999274"]/div/p[@class="desc"]/b/node()')
-                for desc in descs:
-                    # 如果是字符，则直接取出
-                    if isinstance(desc, str):
-                        msg = msg + desc
-                    else:
-                        # 如果是span类型，则要去找数据
-                        # span class的attr
-                        span_class_attr_name = desc.attrib["class"]
-                        # 偏移量，以及所处的段
-                        offset, position = css_and_px_dict[span_class_attr_name]
-                        index = abs(int(float(offset)))
-                        position = abs(int(float(position)))
-                        # 判断
-                        for key, value in svg_threshold_and_int_dict.items():
-                            if position in value:
-                                threshold = int(math.ceil(index / 12))
-                                word = int(key[threshold - 1])
-                                msg += msg + word
-                print("==============================================")
-                print(msg)
-
             # 获取点评总数
             comment_and_price_datas = shop.xpath('.//div[@class="comment"]')
             for comment_and_price_data in comment_and_price_datas:

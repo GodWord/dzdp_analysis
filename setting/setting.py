@@ -6,6 +6,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:training@127.0.0.1/dzdp_db'
 
 LOGIN_URL = 'https://account.dianping.com/login'
+SEARCH_KEYWORD = '农家乐美食'
+DB_SOURCE = {
+    'default': r'mysql+pymysql://root:training@127.0.0.1:3306/dzdp_db?charset=utf8',
+}
 
 PROXIES_API_URL = 'http://webapi.http.zhimacangku.com/getip?num=1&type=2&pro=0&city=0&yys=0&port=1&pack=36593&ts=1&ys=0&cs=0&lb=1&sb=0&pb=45&mr=1&regions='
 

@@ -1,6 +1,5 @@
 # -*- coding:utf-8 -*
 import logging
-import time
 
 logger = logging.getLogger('utils')
 
@@ -138,41 +137,6 @@ class CrawlerUtils(object):
             return False
 
     @staticmethod
-    def get_json(url, headers=None, params=None, is_post=False, **kwargs):
-        import json
-        import logging
-        try:
-            data = json.loads(CrawlerUtils.get_content(url, headers=headers, params=params, is_post=is_post, **kwargs))
-        except Exception as e:
-            logging.error(e)
-            data = dict()
-
-        return data
-
-    @staticmethod
-    def table_exists(table_name, conn):
-        import re
-        """"判断表是否存在"""
-        cur = conn.cursor()
-        sql = "show tables;"
-        cur.execute(sql)
-        tables = [cur.fetchall()]
-        table_list = re.findall('(\'.*?\')', str(tables))
-        table_list = [re.sub("'", '', each) for each in table_list]
-
-        if table_name in table_list:
-            return True  # 存在返回True
-        else:
-            return False  # 不存在返回False
-
-    @staticmethod
-    def execute_sql(sql, conn):
-        cur = conn.cursor()
-        cur.execute(sql)
-        res = cur.fetchall()
-        return res
-
-    @staticmethod
     def get_proxies(api_url):
         import json
         import requests
@@ -201,32 +165,10 @@ class CrawlerUtils(object):
         return proxies
 
     @staticmethod
-    def get_cookies():
-        import os
-        from selenium import webdriver
-        from selenium.webdriver.common.keys import Keys
-        from functools import reduce
-
-        logger.info('开始获取cookie')
-        chromedriver = "C:/Program Files (x86)/Google/Chrome/Application/chromedriver.exe"
-        os.environ["webdriver.chrome.driver"] = chromedriver
-        option = webdriver.ChromeOptions()
-        option.add_argument('headless')
-        browser = webdriver.Chrome(chromedriver)
-        # browser = webdriver.Chrome(chromedriver, chrome_options=option)
-        browser.get('https://account.dianping.com/login')  # 需要打开的网址
-        browser.find_element_by_xpath('/html/body/div/div[2]/div[5]/span').click()  # 审查元素username的id
-        browser.find_element_by_xpath('//*[@id="tab-account"]').click()  # 审查元素username的id
-
-        time.sleep(10)
-        user = browser.find_element_by_xpath('//*[@id="login-username"]')  # 审查元素username的id
-        user.send_keys("kk3132012")  # 输入账号
-        password = browser.find_element_by_xpath('//*[@id="login-password"]')  # 审查元素password的name
-        password.send_keys("kk3132012")  # 输入密码
-        password.send_keys(Keys.RETURN)  # 实现自动点击登陆
-        cookie_dict = browser.get_cookies()
-        browser.close()
-        cookie = reduce(lambda x, y: x + y, map(lambda x: x['name'] + '=' + x['value'] + '; ', cookie_dict))[:-2]
-
-        logger.info('cookie获取完成:%s' % (cookie,))
-        return cookie
+    def get_md5_value(value):
+        import hashlib
+        # 将字符串转成md5
+        md5 = hashlib.md5()  # 获取一个MD5的加密算法对象
+        md5.update(value.encode("utf8"))  # 得到MD5消息摘要
+        md5_vlaue = md5.hexdigest()  # 以16进制返回消息摘要，32位
+        return md5_vlaue

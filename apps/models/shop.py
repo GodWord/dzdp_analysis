@@ -21,8 +21,7 @@ class Shop(Base):
 
     id = Column(BigInteger, primary_key=True, index=True, autoincrement=True)
     shop_id = Column(BigInteger, nullable=True, index=True, unique=True, comment='商家ID')
-    name = Column(String(255), nullable=True, comment='商家名称')
-    business_district = Column(String(255), nullable=True, comment='所在商圈')
+    shop_name = Column(String(255), nullable=True, comment='商家名称')
     address = Column(String(500), nullable=True, default='未知', comment='地址')
     per_capita_price = Column(Integer, nullable=True, default=0, comment='人均价格')
     total_number_comments = Column(Integer, nullable=True, default=0, comment='评论总数')
