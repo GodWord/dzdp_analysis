@@ -4,11 +4,11 @@ from datetime import datetime
 from sqlalchemy import BigInteger, Column, Integer, String, DateTime, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 
-from setting.setting import SQLALCHEMY_DATABASE_URI
+from setting.setting import DB_SOURCE
 
 Base = declarative_base()
 
-engine = create_engine(SQLALCHEMY_DATABASE_URI, encoding="utf-8", echo=True)
+engine = create_engine(DB_SOURCE['default'], encoding="utf-8", echo=True)
 
 
 class Shop(Base):

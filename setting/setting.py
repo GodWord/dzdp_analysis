@@ -3,8 +3,6 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:training@127.0.0.1/dzdp_db'
-
 LOGIN_URL = 'https://account.dianping.com/login'
 SEARCH_KEYWORD = '农家乐美食'
 DB_SOURCE = {
